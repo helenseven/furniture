@@ -13,7 +13,9 @@ body {
     font-size: 100%;
     font-family: "Lato", sans-serif;
 }
-
+.bg-grey{
+    background-color: darkslategrey;
+}
 .container {
     max-width: 1140px;
     width: 100%;
@@ -56,13 +58,15 @@ body {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+    background-color: rgba(60,73,85);
+    backdrop-filter: blur(5px);
 }
 .top-line .logo__link {
     display: block;
 }
 .logo__img{
     width: 5em;
-    margin: 2em;
+    margin: 1.5em;
 }
 .img_basket{
     width: 2em;
@@ -121,8 +125,12 @@ body {
     -webkit-transition: color .3s ease;
     transition: color .3s ease;
 }
+
 .top-line .navigation .menu__link:hover {
-    color: #3c4955;
+    color: #788585;
+}
+.menu_auto:hover{
+    color: #78B285;
 }
 
 .first-screen {
@@ -174,12 +182,12 @@ body {
     z-index: 2;
 }
 .first-screen .title {
-    font-family: "Big John";
+    font-family: "Lato", sans-serif;
     font-size: 46px;
     margin: 0 0 20px;
 }
 .first-screen .subtitle {
-    font-family: "Slim Joe";
+    font-family: "Lato", sans-serif;
     font-size: 30px;
     margin-bottom: 35px;
 }
@@ -228,6 +236,7 @@ body {
 .catalog__tabs-item {
     list-style: none;
 }
+
 .catalog__tabs-link {
     text-transform: capitalize;
     text-decoration: none;
@@ -236,14 +245,14 @@ body {
     text-align: center;
     background-color: #3c4955;
     border-radius: 3px;
-    color: black;
+    color: #ffffff;
     -webkit-transition: all .2s ease;
     transition: all .2s ease;
 }
-.catalog__tabs-link.active,
+
 .catalog__tabs-link:hover {
-    background-color: #3c4955;
-    color: #fff;
+    background-color: #788585;
+    color: black;
 }
 .catalog__list {
     display: -webkit-box;
@@ -340,6 +349,215 @@ body {
     font-size: 16px;
     display: block;
     margin-top: .5rem;
+}
+.shipping{
+
+}
+.shipping_img{
+
+}
+
+.about {
+    background: url("../img/furniture.jpg") no-repeat 0 0;
+    background-position: 0% 60%;
+    background-size: cover;
+    position: relative;
+    z-index: 0;
+    color: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    min-height: 50vh;
+}
+.about::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: rgba(60, 73, 85, .7);
+}
+.about .row {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    z-index: 2;
+    position: relative;
+}
+.shipping__block, .about__block  {
+    -ms-flex-preferred-size: 50%;
+    flex-basis: 45%;
+    padding: 8em;
+}
+.shipping__title, .about__title {
+    font-size: 32px;
+    margin: 0 0 .2rem;
+    font-weight: 700;
+}
+
+.shipping__text .about__text {
+    font-size: 16px;
+    margin: 0 0 1rem;
+    line-height: 1.4;
+}
+.shipping__btn, .about__btn {
+    max-width: 140px;
+    background: none;
+    border-radius: 3px;
+    border: 2px solid currentColor;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+    text-transform: uppercase;
+    display: block;
+    text-decoration: none;
+    width: 100%;
+}
+.shipping__btn{
+    color: #3c4955;
+    background: #f85d62;
+    padding: 10px 20px;
+}
+.shipping__btn:hover{
+    color: #ffffff;
+    background: black;
+}
+.about__btn{
+    color: #ffffff;
+    padding: 10px 37px;
+}
+.about__btn:hover {
+    color: #ffffff;
+    background-color: #3c4955;
+    border-color: #3c4955;
+}
+
+.contacts {
+    padding: 50px 0;
+}
+.contacts .container {
+    max-width: 700px;
+}
+.contacts .input-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.contacts__title {
+    font-size: 26px;
+    color: #3c4955;
+    text-align: center;
+    margin-bottom: 2.3rem;
+}
+.contacts__form > * {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 30px;
+}
+.contacts__form > *:last-child {
+    margin-bottom: 0;
+}
+.contacts__label {
+    max-width: 330px;
+}
+.contacts__label,
+.contacts__textarea-label {
+    width: 100%;
+    position: relative;
+}
+.contacts__label::before,
+.contacts__label::after,
+.contacts__textarea-label::before,
+.contacts__textarea-label::after {
+    content: "";
+    position: absolute;
+}
+.contacts__label::before,
+.contacts__textarea-label::before {
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    background-color: #3c4955;
+    border-radius: 3px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.contacts__label::after,
+.contacts__textarea-label::after {
+    left: 50px;
+    border: 10px solid transparent;
+    border-left-color: #3c4955;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.contacts__textarea-label[for="3"]::before {
+    background-position: center 15px;
+}
+.contacts__input {
+    width: 100%;
+    min-height: 50px;
+}
+.contacts__input,
+.contacts__textarea {
+    border: 2px solid #3c4955;
+    padding-left: calc(70px);
+    font-weight: 700;
+}
+.contacts__textarea,
+.contacts [type="submit"] {
+    width: 100%;
+}
+.contacts [type="submit"] {
+    background-color: #3c4955;
+    color: #fff;
+    padding: 15px 0;
+    border: none;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    -webkit-transition: background-color .2s ease;
+    transition: background-color .2s ease;
+}
+.contacts [type="submit"]:hover {
+    background-color: #788585;
+    color: #3c4955;
+}
+.contacts__input,
+.contacts__textarea,
+.contacts [type="submit"] {
+    border-radius: 3px;
+}
+.contacts__textarea-label {
+    min-height: 225px;
+    max-height: 225px;
+}
+.contacts__textarea-label::before {
+    bottom: 0;
+    height: initial;
+}
+.contacts__textarea-label::after {
+    top: 27px;
+}
+.contacts__textarea {
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
 }
 
 .footer {

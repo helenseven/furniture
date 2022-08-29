@@ -1,24 +1,26 @@
-<?php session_start();?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex">
-    <title>Меблі</title>
-    <link rel="shortcut icon" type="image/x-icon" href="img/logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Lato|700" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-</head>
+<?php
+session_start();
+include_once 'database.php';
+
+$conn = connectToDB();
+$goods = getGoods($conn);
+$categories = getCategories($conn);
+
+include_once 'header.php';
+
+if(isset($_GET['logOut']))
+{
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
+?>
 <body>
 <!-- TOP LINE -->
 <div class="row top-line">
     <div class="container">
         <div class="logo">
-            <a class="logo__link" href="/">
+            <a class="logo__link" href="index.php">
                 <img class="logo__img" src="img/logo.png" alt="logo">
             </a>
         </div>
@@ -37,26 +39,27 @@
                     <a href="#contacts" class="menu__link">contact</a>
                 </li>
                 <li class="menu__item">
-                <div class="basket">
-                    <a href="basket.php" class="menu__link"><span>Basket</span>
-                    <img class="img_basket" src="img/bin.png" alt=""></a>
-                </div>
-                </li>
-                <?php if(isset($_SESSION['user'])):?>
-                <li class="menu__item">
-                    <div class="authorization">
-                        <a class="menu__link"><span><?php echo $_SESSION['user']['name'] ?></span>
-                            <img class="img_basket" src="img/user.png" alt=""></a>
+                    <div class="basket">
+                        <a href="basket.php" class="menu__link"><span>Basket</span>
+                            <img class="img_basket" src="img/bin.png" alt=""></a>
                     </div>
                 </li>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <li class="menu__item">
+                        <div class="authorization">
+                            <a class="menu__link"><span class="menu_auto"><?php echo $_SESSION['user']['name'] ?></span>
+                                <img class="img_basket" src="img/user.png" alt=""></a>
+                        </div>
+                        <a href="?logOut" class="menu__link">Log Out</a>
+                    </li>
                 <?php else: ?>
-                <li class="menu__item">
-                    <div class="authorization">
-                        <a href="authorization.php" class="menu__link"><span>authorization</span>
-                            <img class="img_basket" src="img/user.png" alt=""></a>
-                    </div>
-                </li>
-                <?php endif?>
+                    <li class="menu__item">
+                        <div class="authorization">
+                            <a href="authorization.php" class="menu__link"><span class="menu_auto">authorization</span>
+                                <img class="img_basket" src="img/user.png" alt=""></a>
+                        </div>
+                    </li>
+                <?php endif ?>
             </ul>
         </nav>
     </div>
@@ -73,100 +76,127 @@
             <h2 class="subtitle">New lines added</h2>
             <h2 class="subtitle">Up to 50% off</h2>
             <div class="btn_shop">
-                <a class="btn_shop_link" href="/">Shop now</a>
+                <a class="btn_shop_link" href="#catalog">Shop now</a>
             </div>
         </div>
     </div>
 </header>
 <!-- end first screen -->
 
+<!-- catalog screen -->
 <section class="catalog" id="catalog">
     <div class="container">
 
         <div class="row">
             <ul class="catalog__tabs">
+
+                <?php foreach ($categories as $category): ?>
                 <li class="catalog__tabs-item">
-                    <a href="#" class="catalog__tabs-link active">Item1</a>
+                    <a href="#" class="catalog__tabs-link active"><?php echo $category['title'] ?></a>
                 </li>
-                <li class="catalog__tabs-item">
-                    <a href="#" class="catalog__tabs-link">Item2</a>
-                </li>
-                <li class="catalog__tabs-item">
-                    <a href="#" class="catalog__tabs-link">Item3</a>
-                </li>
-                <li class="catalog__tabs-item">
-                    <a href="#" class="catalog__tabs-link">Item4</a>
-                </li>
-                <li class="catalog__tabs-item">
-                    <a href="#" class="catalog__tabs-link">Item5</a>
-                </li>
+                <?php endforeach; ?>
+
             </ul>
         </div>
 
         <div class="row">
             <ul class="catalog__list">
 
-<?php foreach ($goods as $good): ?>
-                <li class="catalog__item small">
-                    <a href="#" class="catalog__link">
-                        <img class="catalog__img" src="<?php echo $good['image'] ?>" alt="catalog item" >
-                        <p class="catalog__text"><?php echo $good['name'] ?><span><?php echo $good['description'] ?></span><span> £<?php echo $good['price']?></span>
-                        </p>
-                    </a>
-                </li>
-<?php endforeach; ?>
+                <?php foreach ($goods as $good): ?>
+                    <li class="catalog__item small">
+                        <a href="product.php" class="catalog__link">
+                            <img class="catalog__img" src="<?php echo $good['image'] ?>" alt="catalog item">
+                            <p class="catalog__text"><?php echo $good['name'] ?>
+                                <span><?php echo $good['description'] ?></span><span> £<?php echo $good['price'] ?></span>
+                            </p>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
 
-<!--                                <li class="catalog__item">-->
-<!--                                    <a href="#" class="catalog__link">-->
-<!--                                        <img class="catalog__img" src="img/item-2.jpg" alt="catalog item" >-->
-<!--                                        <p class="catalog__text">Clover<span>Acacia Wood 22 Bottle Wall Mounted Wine Rack, Natural Ash Wood</span><span>-->
-<!--                £ 78</span>-->
-<!--                                        </p>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="catalog__item small">-->
-<!--                                    <a href="#" class="catalog__link">-->
-<!--                                        <img class="catalog__img" src="img/item-3.jpg" alt="catalog item" >-->
-<!--                                        <p class="catalog__text">Lomond<span>Lift Top Coffee Table with Storage, Mango Wood and Black</span><span>-->
-<!--                £ 425</span>-->
-<!--                                        </p>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="catalog__item">-->
-<!--                                    <a href="#" class="catalog__link">-->
-<!--                                        <img class="catalog__img" src="img/item-4.jpg" alt="catalog item" >-->
-<!--                                        <p class="catalog__text">Damien<span>Bedside Table, Oak Effect & Black</span><span>-->
-<!--                £ 170</span>-->
-<!--                                        </p>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!---->
-<!--                    </div>-->
-                </section>
+</section>
+<!-- end catalog screen -->
 
-                <footer class="footer">
-                    <div class="container">
-                        <div class="row">
+<!-- shipping  -->
+<section class="shipping" id="shipping">
+    <div class="container">
+        <div class="row">
+            <div class="shipping__block">
 
-                            <nav class="social">
-                                <ul class="social__menu">
-                                    <li class="social__item">
-                                        <a href="#" class="social__link twitter" target="_blank"></a>
-                                    </li>
-                                    <li class="social__item">
-                                        <a href="#" class="social__link instagram" target="_blank"></a>
-                                    </li>
-                                    <li class="social__item">
-                                        <a href="#" class="social__link facebook" target="_blank"></a>
-                                    </li>
-                                </ul>
-                            </nav>
+                <img class="shipping_img" height="100" width="100" src="img/shipping.svg" alt="shipping" >
+                <h2 class="shipping__title">Delivery</h2>
+                <p class="shipping__text">
+                    As long as all your items are with the same carrier, and the difference in lead times isn't too much, grouped delivery will be given as an option at the checkout for you to pick if you would like to do this and have all items delivered together.
+                </p>
+                <a class="shipping__btn" href="https://novaposhta.ua/" target="_blank">Nova Poshta</a>
 
-                        </div>
-                    </div>
-                </footer>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end shipping  -->
 
-                </body>
-                </html>
+<!--about -->
+<section class="about" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="about__block">
+                <h2 class="about__title">We’re different by design </h2>
+                <p class="about__text">
+                    Our story started with a problem (the best ideas usually do). Some ten years ago, our founder was furnishing his flat. Frustrated at the lack of well-designed, good quality and affordable sofas, he set about redefining the process. The concept was clear: collaborate with independent designers and makers to create pieces you’ll love, minus the mark-up. The destination for creating your dream home.
+                </p>
+                <a class="about__btn" href="#contacts">contact</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end about -->
+
+<!--contacts -->
+<section class="contacts" id="contacts">
+    <div class="container">
+        <h2 class="contacts__title">Contact</h2>
+        <form action="" class="contacts__form">
+            <div class="input-row">
+                <label for="1" class="contacts__label">
+                    <input type="text" id="1" class="contacts__input" placeholder="Name">
+                </label>
+                <label for="2" class="contacts__label">
+                    <input type="text" id="2" class="contacts__input" placeholder="Email">
+                </label>
+            </div>
+
+            <label for="3" class="contacts__textarea-label">
+                <textarea class="contacts__textarea" name="" id="3" placeholder="Message"></textarea>
+            </label>
+
+            <input type="submit" value="Send a question">
+        </form>
+    </div>
+</section>
+<!-- end contacts -->
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+
+            <nav class="social">
+                <ul class="social__menu">
+                    <li class="social__item">
+                        <a href="#" class="social__link twitter" target="_blank"></a>
+                    </li>
+                    <li class="social__item">
+                        <a href="#" class="social__link instagram" target="_blank"></a>
+                    </li>
+                    <li class="social__item">
+                        <a href="#" class="social__link facebook" target="_blank"></a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
