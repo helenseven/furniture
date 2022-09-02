@@ -3,7 +3,6 @@ session_start();
 include_once 'database.php';
 
 $conn = connectToDB();
-$goods = getGoods($conn);
 $categories = getCategories($conn);
 
 include_once 'header.php';
@@ -14,6 +13,13 @@ if(isset($_GET['logOut']))
     header('Location: index.php');
     exit;
 }
+
+if(isset($_GET['category_id'])) {
+    $goods = getGoodsByCategory($conn, $_GET['category_id']);
+} else {
+    $goods = getGoods($conn);
+}
+
 ?>
 <body>
 <!-- TOP LINE -->
@@ -44,6 +50,7 @@ if(isset($_GET['logOut']))
                             <img class="img_basket" src="img/bin.png" alt=""></a>
                     </div>
                 </li>
+
                 <?php if (isset($_SESSION['user'])): ?>
                     <li class="menu__item">
                         <div class="authorization">
@@ -60,6 +67,7 @@ if(isset($_GET['logOut']))
                         </div>
                     </li>
                 <?php endif ?>
+
             </ul>
         </nav>
     </div>
@@ -92,7 +100,7 @@ if(isset($_GET['logOut']))
 
                 <?php foreach ($categories as $category): ?>
                 <li class="catalog__tabs-item">
-                    <a href="#" class="catalog__tabs-link active"><?php echo $category['title'] ?></a>
+                    <a href="?category_id=<?php echo $category['id']?>" class="catalog__tabs-link active"><?php echo $category['title'] ?></a>
                 </li>
                 <?php endforeach; ?>
 
@@ -104,7 +112,7 @@ if(isset($_GET['logOut']))
 
                 <?php foreach ($goods as $good): ?>
                     <li class="catalog__item small">
-                        <a href="product.php" class="catalog__link">
+                        <a href="product.php?id=<?php echo $good['id']?>" class="catalog__link">
                             <img class="catalog__img" src="<?php echo $good['image'] ?>" alt="catalog item">
                             <p class="catalog__text"><?php echo $good['name'] ?>
                                 <span><?php echo $good['description'] ?></span><span> £<?php echo $good['price'] ?></span>

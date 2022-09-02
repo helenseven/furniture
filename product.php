@@ -1,14 +1,25 @@
 <?php
 session_start();
-$_SESSION['name'] = $_GET['name'];
-$_SESSION['numberOf'] = $_GET['numberOf'];
-$_SESSION['price'] = $_GET['price'];
+if (isset($_GET["product_name"]) && isset($_GET["numberOf"])&& isset($_GET["price"]))
+{
+    $product_name = $_SESSION["product_name"];
+    $numberOf = $_SESSION["numberOf"];
+    $price = $_SESSION["price"];
+    var_dump($_SESSION);
+}else{
+    echo "Bye";
+}
+
+var_dump($_SESSION);
 
 include_once 'database.php';
 
-$conn = connectToDB();
-$goods = getGoods($conn);
-
+if (isset($_GET['id'])) {
+    $conn = connectToDB();
+    $good = getGoodById($conn, $_GET['id']);
+} else {
+    header('Location: /');
+}
 
 include_once 'header.php';
 ?>
@@ -24,7 +35,7 @@ include_once 'header.php';
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="index.php">All Products</a></li>
+                        <li><a class="dropdown-item" href="index.php#catalog">All Products</a></li>
                     </ul>
                 </li>
             </ul>
@@ -38,8 +49,6 @@ include_once 'header.php';
 </nav>
 <form method="get" action="product.php">
 <div class="container mt-5 mb-5">
-
-    <?php foreach ($goods as $good): ?>
     <div class="card">
         <div class="row g-0">
             <div class="col-md-6 border-end">
@@ -50,19 +59,18 @@ include_once 'header.php';
             </div>
             <div class="col-md-6">
                 <div class="p-3 right-side">
-                    <div class="d-flex justify-content-between align-items-center" ><h3><?php echo $good['name']?></h3></i></div>
+                    <div class="d-flex justify-content-between align-items-center" id="product_name"><h3><?php echo $good['name']?></h3></i></div>
                     <div class="mt-2 pr-3 content"><p><?php echo $good['description'] ?></p></div>
-                    <input id="form1" min="0" name="quantity" value="<?php echo $good['numberOf'] ?>" type="number" class="form-control form-control-sm">
-                    <h3>£<?php echo $good['price'] ?></h3>
+                    <input id="numberOf" min="0" name="quantity" value="<?php echo $good['numberOf'] ?>" type="number" class="form-control form-control-sm">
+                    <h3 id="price">£<?php echo $good['price'] ?></h3>
                     <div class="buttons d-flex flex-row mt-5 gap-3">
-                        <button class="btn btn-outline-dark">Buy Now</button>
-                        <button class="btn btn-dark">Add to Basket</button>
+                        <a class="btn btn-outline-dark" href="basket.php">Buy Now</a>
+                        <a class="btn btn-dark"  href="basket.php">Add to Basket</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <?php endforeach; ?>
 </form>
 </div>
 </body>

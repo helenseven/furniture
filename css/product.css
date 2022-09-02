@@ -65,5 +65,6 @@ hr:not([size]) {
 .buttons .btn {
     height: 50px;
     width: 150px;
+    padding: 0.7em;
     border-radius: 0px !important
 }

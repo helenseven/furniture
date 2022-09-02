@@ -5,10 +5,22 @@ function getCategories($conn) {
     return $result->fetchAll();
 }
 
+function getGoodsByCategory($conn, $id) {
+    $sql = "SELECT * FROM goods WHERE category_id=" . $id;
+    $result = $conn->query($sql);
+    return $result->fetchAll();
+}
+
 function getGoods($conn) {
     $sql = "SELECT * FROM goods";
     $result = $conn->query($sql);
     return $result->fetchAll();
+}
+
+function getGoodById($conn, $id) {
+    $sql = "SELECT * FROM goods WHERE id=" . $id;
+    $result = $conn->query($sql);
+    return $result->fetch();
 }
 
 function connectToDB() {
